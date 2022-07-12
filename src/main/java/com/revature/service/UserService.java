@@ -47,4 +47,9 @@ public class UserService {
 				.orElseThrow(() -> new UserNotFoundException("No user found with id " + id));
 	}
 	
+	@Transactional(readOnly=true)
+	public User findByPublicAddress(String publicAddress) {
+		return userRepo.findUserByPublicAddress(publicAddress);
+	}
+	
 }

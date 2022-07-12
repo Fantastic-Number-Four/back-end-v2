@@ -1,6 +1,7 @@
 package com.revature.entities;
 
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +30,12 @@ public class User {
 	@Column(name="user_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(unique=true)
+	private String publicAddress;
+	
+	@Column
+	private String nonce = "1657655754508";
 	
 	@ManyToMany
 	@JoinTable(name="users_currencypairs",

@@ -31,7 +31,7 @@ public class JwtTokenManager {
 		return Jwts.builder() // io.jsonwebtoken
 				// payload 
 				.setId(String.valueOf(user.getId()))
-				.setIssuer("Rolodex API") // the source that generated the token
+				.setIssuer("Fantastic Forex API") // the source that generated the token
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.signWith(key).compact();
 	}
