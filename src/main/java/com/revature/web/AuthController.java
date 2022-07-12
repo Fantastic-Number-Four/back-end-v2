@@ -44,6 +44,7 @@ public class AuthController {
 	@GetMapping
 	public UserLoginDTO getNonce(@RequestBody UserLoginDTO loginDetails) {
 		User user = uServ.findByPublicAddress(loginDetails.getPublicAddress());
+		// TODO: create a new user if one is not found in the DB
 		loginDetails.setMessage(String.valueOf(user.getNonce()));
 
 		return loginDetails;
@@ -87,7 +88,7 @@ public class AuthController {
 
 	        // Check if one of the generated Keys match the public wallet ID.
 	        for(String recoveredKey : recoveredKeys) {
-	        	System.out.println(recoveredKey);
+//	        	System.out.println(recoveredKey);
 	        	
 	            if(recoveredKey.equalsIgnoreCase(publicAddress)) { 
 	            	String token = tokenManager.issueToken(user);
@@ -104,7 +105,7 @@ public class AuthController {
 	        }
 	        
 	        response.setStatus(401);
-	        response.setHeader("TestHeader", "1");
+//	        response.setHeader("TestHeader", "1");
 	        return null;
 	    }
 	    catch (Exception e) {

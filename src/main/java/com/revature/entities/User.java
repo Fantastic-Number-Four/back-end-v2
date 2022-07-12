@@ -34,6 +34,7 @@ public class User {
 	@Column(unique=true)
 	private String publicAddress;
 	
+	// TODO: make this random again....only constant for debugging purpose
 	@Column
 	private String nonce = "1657655754508";
 	
