@@ -38,8 +38,8 @@ public class UserController {
 	
 	
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Set<String>> findById(@PathVariable("id") int id){
+	@GetMapping("/watchlist/{id}")
+	public ResponseEntity<Set<String>> findWatchlistById(@PathVariable("id") int id){
 		return ResponseEntity.ok(uServ.getById(id).getCurrencyPairs().stream().map(address -> address.getAddress()).collect(Collectors.toSet()));
 	}
 	

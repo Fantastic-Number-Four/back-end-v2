@@ -31,7 +31,7 @@ public class UserService {
 	
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public User add(User u) {
-		userRepo.findById(u.getId()).orElseThrow(() -> new UserNotFoundException("No user found with id " + u.getId()));
+//		userRepo.findById(u.getId()).orElseThrow(() -> new UserNotFoundException("No user found with id " + u.getId()));
 		if (u.getCurrencyPairs() != null) {
 			u.getCurrencyPairs().forEach(currencyPairs -> cpRepo.save(currencyPairs));
 		}
