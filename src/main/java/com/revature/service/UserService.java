@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.revature.data.CurrencyPairRepository;
 import com.revature.data.UserRepository;
 import com.revature.entities.User;
-import com.revature.entities.Watchlist;
 import com.revature.exceptions.UserNotFoundException;
 
 @Service
