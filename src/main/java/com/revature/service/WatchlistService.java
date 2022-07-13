@@ -51,6 +51,7 @@ public class WatchlistService {
 		
 		
 	}
+	
 	@Transactional(propagation=Propagation.REQUIRED) // default setting of transactions in Spring
 	public void remove(int id) {
 		

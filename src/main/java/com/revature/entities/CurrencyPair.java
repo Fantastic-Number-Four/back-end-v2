@@ -41,8 +41,8 @@ public class CurrencyPair {
 	@ManyToMany(mappedBy="currencyPairs")
 	private Set<User> users;
 	
-	@ManyToOne
-	@JoinColumn(name="watchlist_id", nullable=false)
-	private Watchlist watchlist;
+//	@ManyToOne
+//	@JoinColumn(name="watchlist_id", nullable=false)
+//	private Watchlist watchlist;
 	
 }

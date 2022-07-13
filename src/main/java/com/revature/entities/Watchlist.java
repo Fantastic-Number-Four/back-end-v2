@@ -33,14 +33,14 @@ public class Watchlist {
 	private int id;
 	
 	private int userId;
-	@OneToMany(mappedBy="watchlist")
-	private Set<CurrencyPair> watchlist;
-	
-//	@OneToMany
-//	@JoinTable(name = "users_watchlist", 
-//	joinColumns = @JoinColumn(name = "watchlist_id"), 
-//	inverseJoinColumns = @JoinColumn(name = "currencypair_id"))
+//	@OneToMany(mappedBy="watchlist")
 //	private Set<CurrencyPair> watchlist;
+//	
+	@OneToMany
+	@JoinTable(name = "users_watchlist", 
+	joinColumns = @JoinColumn(name = "watchlist_id"), 
+	inverseJoinColumns = @JoinColumn(name = "currencypair_id"))
+	private Set<CurrencyPair> watchlist;
 	
 
 }

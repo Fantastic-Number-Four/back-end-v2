@@ -37,13 +37,16 @@ public class WatchlistController {
 		
 	}
 	
-//	@GetMapping("/{userId}")
-//	public ResponseEntity<Watchlist> findWatchlistByUserId(@PathVariable("userId") int id){
-//		return ResponseEntity.ok(wlServ.getByUserId(id));
-//	}
+
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<Watchlist> findWatchlistByUserId(@PathVariable("id") int id){
+	public ResponseEntity<Watchlist> findWatchlistById(@PathVariable("id") int id){
 		return ResponseEntity.ok(wlServ.getById(id));
+	}
+	
+	@GetMapping("/userId/{userId}")
+	public ResponseEntity<Watchlist> findWatchlistByUserId(@PathVariable("userId") int id){
+		return ResponseEntity.ok(wlServ.getByUserId(id));
 	}
 	
 	@PostMapping("/add")
