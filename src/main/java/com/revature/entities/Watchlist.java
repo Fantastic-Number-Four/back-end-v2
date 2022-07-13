@@ -8,8 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -19,30 +19,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 @Entity
-@Table(name="currencypairs")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Table(name="watchlist")
+@Data @AllArgsConstructor@NoArgsConstructor
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode(exclude= {"users"}) @ToString(exclude= {"users"})
-
-public class CurrencyPair {
-
+@EqualsAndHashCode(exclude= {"watchlist"}) @ToString(exclude= {"watchlist"})
+public class Watchlist {
 	@Id
-	@Column(name="currencypair_id")
+	@Column(name="watchlist_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	private String address;
+	private int userId;
+	@OneToMany(mappedBy="watchlist")
+	private Set<CurrencyPair> watchlist;
 	
-	@NonNull
-	@ManyToMany(mappedBy="currencyPairs")
-	private Set<User> users;
+//	@OneToMany
+//	@JoinTable(name = "users_watchlist", 
+//	joinColumns = @JoinColumn(name = "watchlist_id"), 
+//	inverseJoinColumns = @JoinColumn(name = "currencypair_id"))
+//	private Set<CurrencyPair> watchlist;
 	
-//	@ManyToOne
-//	@JoinColumn(name="watchlist_id", nullable=false)
-//	private Watchlist watchlist;
-	
+
 }
