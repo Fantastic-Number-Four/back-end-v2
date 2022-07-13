@@ -1,7 +1,5 @@
 package com.revature.web;
 
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.entities.User;
-import com.revature.entities.Watchlist;
 import com.revature.service.UserService;
 
 @RestController
