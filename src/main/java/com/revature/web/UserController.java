@@ -1,5 +1,8 @@
 package com.revature.web;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +39,19 @@ public class UserController {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable("id") int id){
-		return ResponseEntity.ok(uServ.getById(id));
+	public ResponseEntity<Set<String>> findById(@PathVariable("id") int id){
+		return ResponseEntity.ok(uServ.getById(id).getCurrencyPairs().stream().map(address -> address.getAddress()).collect(Collectors.toSet()));
 	}
+	
+	@GetMapping("/findall")
+	public ResponseEntity<Set<User>> getAll(){
+		return ResponseEntity.ok(uServ.findAll());
+		
+	}
+	
+		
+	
+	
+	
 	
 }
