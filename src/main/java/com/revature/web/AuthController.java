@@ -70,12 +70,12 @@ public class AuthController {
 	        String nonce = user.getNonce();
 
 	        // Generate the HASH of the Nonce
-	        byte[] nonceHash = Hash.sha3(nonce.getBytes()); // org.web3j.crypto.Hash
+	        byte[] nonceHash = Hash.sha3(("\u0019Ethereum Signed Message:\n" + nonce.length() + nonce).getBytes()); // org.web3j.crypto.Hash
 
 	        // Generate the Signature Data
 	        byte[] signatureBytes = Numeric.hexStringToByteArray(message); // org.web3j.utils.Numeric
 	        
-	        byte v = (byte) ((signatureBytes[63] < 27) ? (signatureBytes[63] + 27) : signatureBytes[63]);
+	        byte v = (byte) ((signatureBytes[64] < 27) ? (signatureBytes[64] + 27) : signatureBytes[63]);
 	        byte[] r = Arrays.copyOfRange(signatureBytes, 0, 32);
 	        byte[] s = Arrays.copyOfRange(signatureBytes, 32, 64);
 	        
@@ -88,7 +88,7 @@ public class AuthController {
 	            BigInteger S = new BigInteger(1, signatureData.getS());
 	            ECDSASignature ecdsaSignature = new ECDSASignature(R, S);
 	            BigInteger recoveredKey = Sign.recoverFromSignature((byte)i, ecdsaSignature, nonceHash);
-	            
+	        	
 	            if(recoveredKey != null) {
 	                recoveredKeys.add("0x" + Keys.getAddress(recoveredKey)); // org.web3j.crypto.Keys
 	            }
@@ -96,7 +96,7 @@ public class AuthController {
 
 	        // Check if one of the generated Keys match the public wallet ID.
 	        for(String recoveredKey : recoveredKeys) {
-//	        	System.out.println(recoveredKey);
+	        	System.out.println(recoveredKey);
 	        	
 	            if(recoveredKey.equalsIgnoreCase(publicAddress)) { 
 	            	String token = tokenManager.issueToken(user);
