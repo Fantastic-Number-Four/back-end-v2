@@ -118,7 +118,7 @@ public class AuthController {
 	    }
 	    catch (Exception e) {
 	    	e.printStackTrace();
-	    	response.setStatus(401);
+	    	response.setStatus(400);
 	    	return null;
 	    }
 	}
