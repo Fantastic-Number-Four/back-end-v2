@@ -59,7 +59,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/verify")
-	public User signin(@RequestBody UserLoginDTO loginDetails, HttpServletResponse response) {
+	public UserLoginDTO signin(@RequestBody UserLoginDTO loginDetails, HttpServletResponse response) {
 	    try {
 	        // Get the wallet ID and signed message from the body stored in the DTO
 	        String publicAddress = loginDetails.getPublicAddress();
@@ -96,7 +96,7 @@ public class AuthController {
 
 	        // Check if one of the generated Keys match the public wallet ID.
 	        for(String recoveredKey : recoveredKeys) {
-	        	System.out.println(recoveredKey);
+//	        	System.out.println(recoveredKey);
 	        	
 	            if(recoveredKey.equalsIgnoreCase(publicAddress)) { 
 	            	String token = tokenManager.issueToken(user);
@@ -106,9 +106,11 @@ public class AuthController {
 	    			response.addHeader("Access-Control-Expose-Headers", "jwt-token");
 	    			response.setStatus(200);
 	    			
-	    			user.setNonce(String.valueOf(Double.parseDouble(user.getNonce()) + (Math.floor(Math.random() * 10) + 1)));
+	    			user.setNonce(String.valueOf(Long.parseLong(user.getNonce()) * Math.random()));
 	            	
-	                return user;
+	    			loginDetails.setMessage(token);
+	    			
+	                return loginDetails;
 	            }
 	        }
 	        
