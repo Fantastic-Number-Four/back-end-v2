@@ -36,7 +36,7 @@ public class User {
 	
 	// TODO: make this random again....only constant for debugging purpose
 	@Column
-	private String nonce = "1657655754508";
+	private String nonce = String.valueOf(System.currentTimeMillis());
 	
 	@ManyToMany
 	@JoinTable(name="users_currencypairs",

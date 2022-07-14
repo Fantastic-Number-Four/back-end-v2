@@ -31,10 +31,10 @@ public class UserController {
 		this.uServ = uServ;
 	}
 	
-	@PostMapping("/add")
-	public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-		return ResponseEntity.ok(uServ.add(user));
-	}
+//	@PostMapping("/add")
+//	public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+//		return ResponseEntity.ok(uServ.add(user));
+//	}
 	
 	
 	

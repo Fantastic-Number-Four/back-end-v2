@@ -41,16 +41,24 @@ public class AuthController {
 		this.tokenManager = tokenManager;
 	}
 	
-	@GetMapping
+	@PostMapping("/get")
 	public UserLoginDTO getNonce(@RequestBody UserLoginDTO loginDetails) {
 		User user = uServ.findByPublicAddress(loginDetails.getPublicAddress());
-		// TODO: create a new user if one is not found in the DB
+		
+		if (user == null) {
+			user = new User();
+			user.setPublicAddress(loginDetails.getPublicAddress());
+			uServ.add(user);
+			
+			user = uServ.findByPublicAddress(loginDetails.getPublicAddress());
+		}
+		
 		loginDetails.setMessage(String.valueOf(user.getNonce()));
 
 		return loginDetails;
 	}
 
-	@PostMapping
+	@PostMapping("/verify")
 	public User signin(@RequestBody UserLoginDTO loginDetails, HttpServletResponse response) {
 	    try {
 	        // Get the wallet ID and signed message from the body stored in the DTO
