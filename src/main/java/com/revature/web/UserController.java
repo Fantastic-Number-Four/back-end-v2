@@ -48,11 +48,13 @@ public class UserController {
 	
 	
 	@GetMapping("/watchlist")
-	public ResponseEntity<Set<String>> findWatchlistById(@RequestHeader("jwt-token") String token){
+	public ResponseEntity<Set<CurrencyPair>> findWatchlistById(@RequestHeader("jwt-token") String token){
         int userId = tokenManager.parseUserIdFromToken(token);
-		
-		return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs().stream()
-				.map(address -> address.getAddress()).collect(Collectors.toSet()));
+        
+        return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs());
+        
+//		return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs().stream()
+//				.map(address -> address.getAddress()).collect(Collectors.toSet()));
 	}
 	
 //	@GetMapping("/findall")
