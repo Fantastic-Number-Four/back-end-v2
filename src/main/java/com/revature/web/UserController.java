@@ -1,8 +1,8 @@
 package com.revature.web;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -78,6 +78,64 @@ public class UserController {
         user.setCurrencyPairs(watchlist);
         
         uServ.add(user);
+	}
+	
+	@PostMapping("/replace")
+	public void replaceWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody Set<CurrencyPair> currencyPairs) {
+		int userId = tokenManager.parseUserIdFromToken(token);
+		
+		User user = uServ.getById(userId);
+		Set<CurrencyPair> watchlist = user.getCurrencyPairs();
+		
+		// utility list to remove added currencyPairs in a batch
+		Set<CurrencyPair> toRemove = new HashSet<>();
+		
+		// iterate over the watchlist and remove addresses that don't exist in the passed list
+		for (Iterator<CurrencyPair> watchlistIt = watchlist.iterator(); watchlistIt.hasNext(); ) {
+			CurrencyPair watchlistCP = watchlistIt.next();
+			
+			boolean delete = true;
+			for (Iterator<CurrencyPair> currencyPairsIt = currencyPairs.iterator(); currencyPairsIt.hasNext(); ) {
+				CurrencyPair passedCP = currencyPairsIt.next();
+				
+				if (watchlistCP.getAddress().equals(passedCP.getAddress())) {
+					delete = false;
+					break;
+				}
+			}
+			
+			if (delete) {
+				watchlist.remove(watchlistCP);
+				toRemove.add(watchlistCP);
+			}
+		}
+		
+		for (Iterator<CurrencyPair> removeIt = toRemove.iterator(); removeIt.hasNext(); ) {
+			CurrencyPair remove = removeIt.next();
+			cpServ.remove(remove.getId());
+		}
+		
+		// iterate over the passed list and add addresses that don't exist in the watchlist
+		for (Iterator<CurrencyPair> currencyPairsIt = currencyPairs.iterator(); currencyPairsIt.hasNext(); ) {
+			CurrencyPair passedCP = currencyPairsIt.next();
+			
+			boolean add = true;
+			for (Iterator<CurrencyPair> watchlistIt = watchlist.iterator(); watchlistIt.hasNext(); ) {
+				CurrencyPair watchlistCP = watchlistIt.next();
+				
+				if (passedCP.getAddress().equals(watchlistCP.getAddress())) {
+					add = false;
+					break;
+				}
+			}
+			
+			if (add) {
+				watchlist.add(passedCP);
+			}
+		}
+		
+		user.setCurrencyPairs(watchlist);
+		uServ.add(user);
 	}
 	
 	@DeleteMapping("/remove")

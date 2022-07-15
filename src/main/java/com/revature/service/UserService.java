@@ -32,7 +32,7 @@ public class UserService {
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public User add(User u) {
 //		userRepo.findById(u.getId()).orElseThrow(() -> new UserNotFoundException("No user found with id " + u.getId()));
-		log.info("Persisting new User to the DB with public address " + u.getPublicAddress());
+		log.info("Persisting User to the DB with public address " + u.getPublicAddress());
 		
 		if (u.getCurrencyPairs() != null) {
 			u.getCurrencyPairs().forEach(currencyPairs -> cpRepo.save(currencyPairs));
