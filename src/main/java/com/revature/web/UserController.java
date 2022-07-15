@@ -64,12 +64,16 @@ public class UserController {
 //	}
 	
 	@PostMapping("/add")
-	public void addToWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody CurrencyPair currencyPair) {        
+	public void addToWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody Set<CurrencyPair> currencyPairs) {        
         int userId = tokenManager.parseUserIdFromToken(token);
         
         User user = uServ.getById(userId);
         Set<CurrencyPair> watchlist = user.getCurrencyPairs();
-        watchlist.add(currencyPair);
+        
+        for (Iterator<CurrencyPair> it = currencyPairs.iterator(); it.hasNext(); ) {
+        	CurrencyPair currencyPair = it.next();
+        	watchlist.add(currencyPair);
+        }
         
         user.setCurrencyPairs(watchlist);
         
@@ -77,26 +81,31 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/remove")
-	public void removeFromWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody CurrencyPair currencyPair) {        
+	public void removeFromWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody Set<CurrencyPair> currencyPairs) {        
         int userId = tokenManager.parseUserIdFromToken(token);
         
         User user = uServ.getById(userId);
         Set<CurrencyPair> watchlist = user.getCurrencyPairs();
         
-        for (Iterator<CurrencyPair> it = watchlist.iterator(); it.hasNext(); ) {
-        	CurrencyPair current = it.next();
-        	if (currencyPair.getAddress().equals(current.getAddress())) {
-        		currencyPair = current;
-        		break;
-        	}
+        for (Iterator<CurrencyPair> it = currencyPairs.iterator(); it.hasNext(); ) {
+        	CurrencyPair currencyPair = it.next();
+        	
+        	for (Iterator<CurrencyPair> it2 = watchlist.iterator(); it2.hasNext(); ) {
+            	CurrencyPair current = it2.next();
+            	if (currencyPair.getAddress().equals(current.getAddress())) {
+            		currencyPair = current;
+            		break;
+            	}
+            }
+        	
+        	watchlist.remove(currencyPair);
+        	
+        	cpServ.remove(currencyPair.getId());
         }
-        
-        watchlist.remove(currencyPair);
         
         user.setCurrencyPairs(watchlist);
         
         uServ.add(user);
-        cpServ.remove(currencyPair.getId());
 	}
 	
 }
