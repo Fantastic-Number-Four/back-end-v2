@@ -70,6 +70,8 @@ public class UserController {
         watchlist.add(currencyPair);
         
         user.setCurrencyPairs(watchlist);
+        
+        uServ.add(user);
 	}
 	
 	@DeleteMapping("/remove")
@@ -81,6 +83,8 @@ public class UserController {
         watchlist.remove(currencyPair);
         
         user.setCurrencyPairs(watchlist);
+        
+        uServ.add(user);
 	}
 	
 }
