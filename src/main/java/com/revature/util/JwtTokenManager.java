@@ -1,6 +1,7 @@
 package com.revature.util;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class JwtTokenManager {
 		return Jwts.builder() // io.jsonwebtoken
 				// payload 
 				.setId(String.valueOf(user.getId()))
+				.setSubject(user.getPublicAddress())
 				.setIssuer("Fantastic Forex API") // the source that generated the token
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.signWith(key).compact();
@@ -39,13 +41,28 @@ public class JwtTokenManager {
 	public int parseUserIdFromToken(String token){
 		
 		try {
-			return Integer.parseInt(Jwts.parserBuilder()
-					.setSigningKey(key)
-					.build()
-					// this is the way in which we can READ user data from a token
-					.parseClaimsJws(token).getBody().getId());
+			String[] chunks = token.split("\\.");
+			
+			Base64.Decoder decoder = Base64.getUrlDecoder();
+			
+			String payload = new String(decoder.decode(chunks[1]));
+			
+			String[] payloadSplit = payload.split("\"");
+			
+//			System.out.println("===========================");
+//			System.out.println("Token Id: " + payloadSplit[3]);
+//			System.out.println("===========================");
+			
+			return Integer.parseInt(payloadSplit[3]);
+			
+//			return Integer.parseInt(Jwts.parserBuilder()
+//					.setSigningKey(key)
+//					.build()
+//					// this is the way in which we can READ user data from a token
+//					.parseClaimsJws(token).getBody().getId());
 			
 		} catch (Exception e){
+			e.printStackTrace();
 			logger.warn("JWT error parsing user id from token");
 			throw new AuthenticationException("Unable to parse user id from JWT. Please sign in again");
 		}

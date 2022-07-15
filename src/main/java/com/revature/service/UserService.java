@@ -46,7 +46,7 @@ public class UserService {
 	@Transactional(readOnly=true)
 	public User getById(int id) {
 		if (id <= 0) {
-			log.warn("Id cannot be <= 0. Id paasswed was: {}", id);
+			log.warn("Id cannot be <= 0. Id passed was: {}", id);
 			return null;
 		}
 		

@@ -67,6 +67,7 @@ public class AuthController {
 
 	        // Find the nonce from the DB that was used to sign this message
 	        User user = uServ.findByPublicAddress(publicAddress);
+	        
 	        String nonce = user.getNonce();
 
 	        // Generate the HASH of the Nonce
@@ -96,7 +97,7 @@ public class AuthController {
 
 	        // Check if one of the generated Keys match the public wallet ID.
 	        for(String recoveredKey : recoveredKeys) {
-//	        	System.out.println(recoveredKey);
+	        	System.out.println(recoveredKey);
 	        	
 	            if(recoveredKey.equalsIgnoreCase(publicAddress)) { 
 	            	String token = tokenManager.issueToken(user);
@@ -106,7 +107,7 @@ public class AuthController {
 	    			response.addHeader("Access-Control-Expose-Headers", "jwt-token");
 	    			response.setStatus(200);
 	    			
-	    			user.setNonce(String.valueOf(Long.parseLong(user.getNonce()) * Math.random()));
+	    			user.setNonce(String.valueOf(Long.parseLong(user.getNonce()) * Math.random() + 0.5));
 	            	
 	    			loginDetails.setMessage(token);
 	    			

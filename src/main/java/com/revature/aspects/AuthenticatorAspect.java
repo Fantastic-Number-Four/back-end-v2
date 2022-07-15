@@ -7,8 +7,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,22 +24,32 @@ public class AuthenticatorAspect {
 	private JwtTokenManager tokenManager;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	public AuthenticatorAspect(UserService uServ, JwtTokenManager tokenManager) {
+		super();
+		this.uServ = uServ;
+		this.tokenManager = tokenManager;
+	}
+	
 	@Before("execution (* com.revature.web.UserController.*(..))")
 	public void authenticate(JoinPoint joinPoint) {
 		log.info("Checking for user access...");
 		
-		try {
-			RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-	        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-	        HttpServletRequest request = sra.getRequest();
-	        
-	        String token = request.getHeader("jwt-token");
-	        
+		try {	        
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		    String token = request.getHeader("jwt-token");
+		    
+//		    System.out.println("===========================");
+//		    System.out.println("Token: " + token);
+//		    System.out.println("===========================");
+			
 	        int userId = tokenManager.parseUserIdFromToken(token);
+//	        System.out.println(userId);
 	        
 	        uServ.getById(userId); // this method will throw an exception if the user cannot be found in the db
 	        log.info("User with id " + userId + " granted access.");
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Unable to authenticate. Please sign in again.");
 			throw new AuthenticationException("Unable to authenticate. Please sign in again.");
 		}
