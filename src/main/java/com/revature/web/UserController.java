@@ -1,9 +1,9 @@
 package com.revature.web;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.revature.entities.CurrencyPair;
 import com.revature.entities.User;
+import com.revature.service.CurrencyPairService;
 import com.revature.service.UserService;
 import com.revature.util.JwtTokenManager;
 
@@ -31,12 +29,14 @@ import com.revature.util.JwtTokenManager;
 public class UserController {
 
 	private UserService uServ;
+	private CurrencyPairService cpServ;
 	private JwtTokenManager tokenManager;
 	
 	@Autowired
-	public UserController(UserService uServ, JwtTokenManager tokenManager) {
+	public UserController(UserService uServ, CurrencyPairService cpServ, JwtTokenManager tokenManager) {
 		super();
 		this.uServ = uServ;
+		this.cpServ = cpServ;
 		this.tokenManager = tokenManager;
 	}
 	
@@ -80,11 +80,21 @@ public class UserController {
         
         User user = uServ.getById(userId);
         Set<CurrencyPair> watchlist = user.getCurrencyPairs();
+        
+        for (Iterator<CurrencyPair> it = watchlist.iterator(); it.hasNext(); ) {
+        	CurrencyPair current = it.next();
+        	if (currencyPair.getAddress().equals(current.getAddress())) {
+        		currencyPair = current;
+        		break;
+        	}
+        }
+        
         watchlist.remove(currencyPair);
         
         user.setCurrencyPairs(watchlist);
         
         uServ.add(user);
+        cpServ.remove(currencyPair.getId());
 	}
 	
 }
