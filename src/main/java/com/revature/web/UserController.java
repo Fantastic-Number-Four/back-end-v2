@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
@@ -47,13 +48,7 @@ public class UserController {
 	
 	
 	@GetMapping("/watchlist")
-	public ResponseEntity<Set<String>> findWatchlistById(){
-		RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        HttpServletRequest request = sra.getRequest();
-        
-        String token = request.getHeader("jwt-token");
-        
+	public ResponseEntity<Set<String>> findWatchlistById(@RequestHeader("jwt-token") String token){
         int userId = tokenManager.parseUserIdFromToken(token);
 		
 		return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs().stream()
@@ -67,13 +62,7 @@ public class UserController {
 //	}
 	
 	@PostMapping("/add")
-	public void addToWatchlist(@Valid @RequestBody CurrencyPair currencyPair) {
-		RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        HttpServletRequest request = sra.getRequest();
-        
-        String token = request.getHeader("jwt-token");
-        
+	public void addToWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody CurrencyPair currencyPair) {        
         int userId = tokenManager.parseUserIdFromToken(token);
         
         User user = uServ.getById(userId);
@@ -84,13 +73,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/remove")
-	public void removeFromWatchlist(@Valid @RequestBody CurrencyPair currencyPair) {
-		RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        HttpServletRequest request = sra.getRequest();
-        
-        String token = request.getHeader("jwt-token");
-        
+	public void removeFromWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody CurrencyPair currencyPair) {        
         int userId = tokenManager.parseUserIdFromToken(token);
         
         User user = uServ.getById(userId);
