@@ -31,7 +31,6 @@ public class UserService {
 	
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public User add(User u) {
-//		userRepo.findById(u.getId()).orElseThrow(() -> new UserNotFoundException("No user found with id " + u.getId()));
 		log.info("Persisting User to the DB with public address " + u.getPublicAddress());
 		
 		if (u.getCurrencyPairs() != null) {
@@ -42,7 +41,7 @@ public class UserService {
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void remove(int id) {
-		log.info("Deleting User with id " + id);
+		log.info("Deleting User with id {0}", id);
 		
 		userRepo.deleteById(id);
 	}

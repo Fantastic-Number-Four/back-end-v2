@@ -23,7 +23,7 @@ public class CurrencyPairService {
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void remove(int id) {
-		log.info("Deleting CurrencyPair with id " + id);
+		log.info("Deleting CurrencyPair with id {0}", id);
 		
 		cpRepo.deleteById(id);
 	}

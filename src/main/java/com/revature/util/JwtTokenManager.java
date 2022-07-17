@@ -49,10 +49,6 @@ public class JwtTokenManager {
 			
 			String[] payloadSplit = payload.split("\"");
 			
-//			System.out.println("===========================");
-//			System.out.println("Token Id: " + payloadSplit[3]);
-//			System.out.println("===========================");
-			
 			return Integer.parseInt(payloadSplit[3]);
 			
 //			return Integer.parseInt(Jwts.parserBuilder()
