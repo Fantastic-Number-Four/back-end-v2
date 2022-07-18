@@ -89,7 +89,7 @@ public class UserController {
 			}
 			
 			if (delete) {
-				watchlist.remove(watchlistCP);
+				watchlistIt.remove();
 				toRemove.add(watchlistCP);
 			}
 		}
