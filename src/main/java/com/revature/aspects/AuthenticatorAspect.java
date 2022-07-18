@@ -47,7 +47,7 @@ public class AuthenticatorAspect {
 //	        System.out.println(userId);
 	        
 	        uServ.getById(userId); // this method will throw an exception if the user cannot be found in the db
-	        log.info("User with id " + userId + " granted access.");
+	        log.info("User with id {0} granted access.", userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Unable to authenticate. Please sign in again.");
