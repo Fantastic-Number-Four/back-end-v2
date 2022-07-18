@@ -41,7 +41,7 @@ public class UserService {
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void remove(int id) {
-		log.info("Deleting User with id {0}", id);
+		log.info("Deleting User with id {}", id);
 		
 		userRepo.deleteById(id);
 	}

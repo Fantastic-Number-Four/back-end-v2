@@ -60,7 +60,7 @@ class UserServiceTests {
 	void testGetById_returnNull() {
 		User u = uServ.getById(-1);
 
-		assertEquals(u, null);
+		assertEquals(null, u);
 	}
 
 	// ------- findByPublicAddress(String publicAddress) ------- //

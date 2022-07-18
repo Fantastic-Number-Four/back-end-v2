@@ -42,7 +42,7 @@ public class AuthenticatorAspect {
 	        int userId = tokenManager.parseUserIdFromToken(token);
 	        
 	        uServ.getById(userId); // this method will throw an exception if the user cannot be found in the db
-	        log.info("User with id {0} granted access.", userId);
+	        log.info("User with id {} granted access.", userId);
 		} catch (Exception e) {
 			log.error("Unable to authenticate. Please sign in again.");
 			throw new AuthenticationException("Unable to authenticate. Please sign in again.");
