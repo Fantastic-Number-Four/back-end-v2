@@ -38,30 +38,14 @@ public class UserController {
 		this.uServ = uServ;
 		this.cpServ = cpServ;
 		this.tokenManager = tokenManager;
-	}
-	
-//	@PostMapping("/add")
-//	public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-//		return ResponseEntity.ok(uServ.add(user));
-//	}
-	
-	
+	}	
 	
 	@GetMapping("/watchlist")
 	public ResponseEntity<Set<CurrencyPair>> findWatchlistById(@RequestHeader("jwt-token") String token){
         int userId = tokenManager.parseUserIdFromToken(token);
         
         return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs());
-        
-//		return ResponseEntity.ok(uServ.getById(userId).getCurrencyPairs().stream()
-//				.map(address -> address.getAddress()).collect(Collectors.toSet()));
 	}
-	
-//	@GetMapping("/findall")
-//	public ResponseEntity<Set<User>> getAll(){
-//		return ResponseEntity.ok(uServ.findAll());
-//		
-//	}
 	
 	@PostMapping("/add")
 	public void addToWatchlist(@RequestHeader("jwt-token") String token, @Valid @RequestBody Set<CurrencyPair> currencyPairs) {        

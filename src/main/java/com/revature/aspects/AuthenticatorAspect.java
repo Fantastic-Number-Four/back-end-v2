@@ -38,18 +38,12 @@ public class AuthenticatorAspect {
 		try {	        
 			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		    String token = request.getHeader("jwt-token");
-		    
-//		    System.out.println("===========================");
-//		    System.out.println("Token: " + token);
-//		    System.out.println("===========================");
 			
 	        int userId = tokenManager.parseUserIdFromToken(token);
-//	        System.out.println(userId);
 	        
 	        uServ.getById(userId); // this method will throw an exception if the user cannot be found in the db
 	        log.info("User with id {0} granted access.", userId);
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error("Unable to authenticate. Please sign in again.");
 			throw new AuthenticationException("Unable to authenticate. Please sign in again.");
 		}

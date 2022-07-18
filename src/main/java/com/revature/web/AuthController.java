@@ -96,9 +96,7 @@ public class AuthController {
 	        }
 
 	        // Check if one of the generated Keys match the public wallet ID.
-	        for(String recoveredKey : recoveredKeys) {
-	        	System.out.println(recoveredKey);
-	        	
+	        for(String recoveredKey : recoveredKeys) {	        	
 	            if(recoveredKey.equalsIgnoreCase(publicAddress)) { 
 	            	String token = tokenManager.issueToken(user);
 	    			
@@ -116,11 +114,9 @@ public class AuthController {
 	        }
 	        
 	        response.setStatus(401);
-//	        response.setHeader("TestHeader", "1");
 	        return null;
 	    }
 	    catch (Exception e) {
-	    	e.printStackTrace();
 	    	response.setStatus(400);
 	    	return null;
 	    }

@@ -51,14 +51,7 @@ public class JwtTokenManager {
 			
 			return Integer.parseInt(payloadSplit[3]);
 			
-//			return Integer.parseInt(Jwts.parserBuilder()
-//					.setSigningKey(key)
-//					.build()
-//					// this is the way in which we can READ user data from a token
-//					.parseClaimsJws(token).getBody().getId());
-			
 		} catch (Exception e){
-			e.printStackTrace();
 			logger.warn("JWT error parsing user id from token");
 			throw new AuthenticationException("Unable to parse user id from JWT. Please sign in again");
 		}
