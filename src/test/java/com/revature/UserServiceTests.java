@@ -1,7 +1,12 @@
 package com.revature;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -15,32 +20,52 @@ import org.junit.jupiter.api.Test;
 
 import com.revature.data.CurrencyPairRepository;
 import com.revature.data.UserRepository;
+import com.revature.entities.CurrencyPair;
 import com.revature.entities.User;
+import com.revature.exceptions.UserNotFoundException;
 import com.revature.service.UserService;
+
 
 class UserServiceTests {
 
 	private UserService uServ;
 	private UserRepository uRepo;
 	private CurrencyPairRepository cpRepo;
-
+	private User user1;
+	private CurrencyPair cp1;
+	private Set<User> setUser;
+	private Set<CurrencyPair> setCp;
+	private User user;
+	private CurrencyPair cp;
+	
 	@BeforeEach
 	void setup() {
 		uRepo = mock(UserRepository.class);
 		cpRepo = mock(CurrencyPairRepository.class);
 		uServ = new UserService(uRepo, cpRepo);
+    	user1 = new User();
+    	cp1 = new CurrencyPair();
+    	setUser = new HashSet<User>();
+    	setCp = new HashSet<CurrencyPair>();
+    	setUser.add(user1);
+    	setCp.add(cp1);
+    	user = new User(1,"fjdks","jfksdf",setCp );
+    	cp = new CurrencyPair(1,"address",setUser);
 	}
-
+	
 	// ------- add(User u) ------- //
 	@Test
 	void testAdd_success() {
-		User u = new User();
+		
+		User u = user;
 		u.setId(1);
 
 		when(uRepo.save(u)).thenReturn(u);
-
+		if (u.getCurrencyPairs() != null) {
+		u.getCurrencyPairs().forEach(currencyPairs -> cpRepo.save(currencyPairs));
+		   }
 		User u2 = uServ.add(u);
-
+		
 		assertEquals(u, u2);
 	}
 
@@ -54,6 +79,20 @@ class UserServiceTests {
 		Optional<User> u2 = Optional.ofNullable(uServ.getById(1));
 
 		assertEquals(u, u2);
+	}
+	
+	@Test
+	void testGetById_Fail() {
+	
+        Exception exception = assertThrows(UserNotFoundException.class, () -> uServ.getById(1));
+
+        String expectedMessage = "No user found with id 1";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+	
+	
+		
 	}
 
 	@Test
@@ -98,5 +137,12 @@ class UserServiceTests {
 		Set<User> actual = uServ.findAll();
 
 		assertEquals(expected, actual);
+	}
+	
+	@Test 
+	void removeById() {
+		uServ.remove(1);
+		verify(uRepo, times(1)).deleteById(1);
+		
 	}
 }
